@@ -208,7 +208,14 @@ export default function Home() {
         </section>
 
         <section className="space-y-4 rounded-2xl bg-white p-4 shadow-sm ring-1 ring-zinc-200/80">
-          <h2 className="text-sm font-medium text-zinc-800">教科</h2>
+          <div className="space-y-1">
+            <h2 className="text-sm font-medium text-zinc-800">
+              教科（{SUBJECT_IDS.length}教科）
+            </h2>
+            <p className="text-[11px] leading-snug text-zinc-500">
+              {SUBJECT_IDS.map((id) => SUBJECT_LABELS[id]).join("・")}
+            </p>
+          </div>
           <div className="flex flex-wrap gap-1.5">
             {SUBJECT_IDS.map((id) => (
               <button

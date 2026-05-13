@@ -1,10 +1,16 @@
 export type RatingLevel = "good" | "average" | "attention";
 
-export type SubjectId = "math" | "japanese" | "science" | "social";
+export type SubjectId =
+  | "math"
+  | "japanese"
+  | "english"
+  | "science"
+  | "social";
 
 export const SUBJECT_IDS: SubjectId[] = [
   "math",
   "japanese",
+  "english",
   "science",
   "social",
 ];
@@ -12,6 +18,7 @@ export const SUBJECT_IDS: SubjectId[] = [
 export const SUBJECT_LABELS: Record<SubjectId, string> = {
   math: "数学",
   japanese: "国語",
+  english: "英語",
   science: "理科",
   social: "社会",
 };
@@ -23,6 +30,7 @@ export const DIMENSIONS_BY_SUBJECT: Record<
 > = {
   math: ["集中度", "計算・手順", "概念の理解", "応用力"],
   japanese: ["集中度", "読解", "語彙・表現", "作文・記述"],
+  english: ["集中度", "文法理解度", "語彙暗記", "英作文"],
   science: ["集中度", "観察・実験", "概念の理解", "説明のしかた"],
   social: ["集中度", "資料の読み取り", "概念の理解", "記述・まとめ"],
 };
