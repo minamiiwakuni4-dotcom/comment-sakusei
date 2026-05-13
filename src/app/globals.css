@@ -25,3 +25,145 @@ body {
   font-family: var(--font-geist-sans), ui-sans-serif, system-ui, "Hiragino Sans",
     "Hiragino Kaku Gothic ProN", "Yu Gothic UI", "Meiryo", sans-serif;
 }
+
+/* ── ClaMas Assist（index5 移植） ── */
+.clamass-body {
+  margin: 0;
+  font-family:
+    -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  background: #f1f5f9;
+}
+
+.clamass-choice-btn {
+  flex: 1;
+  min-width: 60px;
+  padding: 12px 4px;
+  border: 2px solid #ddd;
+  border-radius: 12px;
+  background: white;
+  cursor: pointer;
+  font-size: 1rem;
+  font-weight: 900;
+  line-height: 1.1;
+  transition: 0.2s;
+  min-height: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+
+.clamass-choice-btn.clamass-active.clamass-eval-good {
+  background: #1e90ff !important;
+  color: white !important;
+  border-color: transparent !important;
+}
+
+.clamass-choice-btn.clamass-active.clamass-eval-normal {
+  background: #87cefa !important;
+  color: black !important;
+  border-color: transparent !important;
+}
+
+.clamass-choice-btn.clamass-active.clamass-eval-effort {
+  background: #badcad !important;
+  color: black !important;
+  border-color: transparent !important;
+}
+
+.clamass-subj-btn {
+  padding: 10px 2px;
+  border-radius: 10px;
+  border: 2px solid #cbd5e1;
+  background: white;
+  font-weight: 900;
+  font-size: 0.7rem;
+  transition: transform 0.2s;
+  line-height: 1.2;
+}
+
+.clamass-subj-btn.clamass-subj-active {
+  border-width: 3px;
+  box-shadow: 0 0 0 4px #dbeafe;
+  transform: scale(0.98);
+}
+
+.clamass-lock-overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(241, 245, 249, 0.85);
+  backdrop-filter: blur(3px);
+  z-index: 50;
+  display: flex;
+  justify-content: center;
+  padding-top: 100px;
+  font-weight: 900;
+  color: #94a3b8;
+  border-radius: 2rem;
+}
+
+.clamass-watermark {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 14rem;
+  font-weight: 900;
+  color: #64748b;
+  opacity: 0.08;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.clamass-preview-item {
+  position: relative;
+  aspect-ratio: 3 / 4;
+  background: #ddd;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.clamass-preview-item img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.clamass-del-btn {
+  position: absolute;
+  top: 4px;
+  right: 4px;
+  background: rgba(0, 0, 0, 0.6);
+  color: white;
+  border-radius: 50%;
+  width: 24px;
+  height: 24px;
+  border: none;
+  cursor: pointer;
+  font-size: 12px;
+  line-height: 1;
+}
+
+.clamass-toast {
+  visibility: hidden;
+  min-width: 250px;
+  background-color: #333;
+  color: #fff;
+  text-align: center;
+  border-radius: 30px;
+  padding: 16px;
+  position: fixed;
+  z-index: 1000;
+  left: 50%;
+  bottom: 30px;
+  transform: translateX(-50%);
+  opacity: 0;
+  transition: opacity 0.5s, bottom 0.5s;
+}
+
+.clamass-toast.clamass-toast-show {
+  visibility: visible;
+  opacity: 1;
+  bottom: 50px;
+}
+

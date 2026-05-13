@@ -1,0 +1,9 @@
+[
+  {
+    "id": "daily_0",
+    "teacher": "サンプル",
+    "student": "デモ生徒",
+    "koma": "A",
+    "isDoneServer": false
+  }
+]
