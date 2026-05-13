@@ -28,28 +28,21 @@ const emptyRatings = (): Partial<Record<DimensionKey, RatingLevel>> => ({
 
 export default function Home() {
   const [photos, setPhotos] = useState<(File | null)[]>([null, null, null]);
-  const [thumbUrls, setThumbUrls] = useState<(string | null)[]>([
-    null,
-    null,
-    null,
-  ]);
   const [subject, setSubject] = useState<SubjectId | null>(null);
   const [ratings, setRatings] =
     useState<Partial<Record<DimensionKey, RatingLevel>>>(emptyRatings);
-  const [generated, setGenerated] = useState("");
+  const [generated, setGenerated] = useState(() => {
+    if (typeof window === "undefined") return "";
+    try {
+      return sessionStorage.getItem(STORAGE_KEY) ?? "";
+    } catch {
+      return "";
+    }
+  });
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [copied, setCopied] = useState(false);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
-
-  useEffect(() => {
-    try {
-      const saved = sessionStorage.getItem(STORAGE_KEY);
-      if (saved) setGenerated(saved);
-    } catch {
-      /* ignore */
-    }
-  }, []);
 
   useEffect(() => {
     try {
@@ -59,15 +52,18 @@ export default function Home() {
     }
   }, [generated]);
 
+  const thumbUrls = useMemo(
+    () => photos.map((p) => (p ? URL.createObjectURL(p) : null)),
+    [photos],
+  );
+
   useEffect(() => {
-    const urls = photos.map((p) => (p ? URL.createObjectURL(p) : null));
-    setThumbUrls(urls);
     return () => {
-      urls.forEach((u) => {
+      thumbUrls.forEach((u) => {
         if (u) URL.revokeObjectURL(u);
       });
     };
-  }, [photos]);
+  }, [thumbUrls]);
 
   const photoCount = useMemo(
     () => photos.filter((p) => p !== null).length,
