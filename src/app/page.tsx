@@ -286,25 +286,39 @@ export default function Home() {
         </div>
 
         <section className="flex h-[min(42dvh,22rem)] min-h-[9.5rem] shrink-0 flex-col gap-1 border-t border-zinc-200/80 bg-zinc-50 px-3 pb-[max(0.5rem,env(safe-area-inset-bottom))] pt-2 shadow-[0_-4px_12px_rgba(0,0,0,0.04)]">
-          <div className="flex shrink-0 flex-wrap items-center justify-between gap-1.5">
+          <div className="flex shrink-0 flex-wrap items-center justify-between gap-1">
             <h2 className="text-xs font-medium text-zinc-800">生成結果</h2>
-            <button
-              type="button"
-              disabled={!generated}
-              onClick={copyAll}
-              className="min-h-8 rounded-lg bg-emerald-600 px-2.5 text-[11px] font-semibold text-white shadow-sm transition hover:bg-emerald-500 disabled:cursor-not-allowed disabled:bg-zinc-200 disabled:text-zinc-400"
-            >
-              {copied ? "コピー済" : "全文コピー"}
-            </button>
+            <div className="flex shrink-0 flex-wrap items-center justify-end gap-1">
+              <button
+                type="button"
+                disabled={!generated}
+                onClick={selectAllText}
+                className="min-h-8 rounded-lg border border-zinc-300 bg-white px-2 text-[11px] font-medium text-zinc-800 shadow-sm transition hover:bg-zinc-50 disabled:cursor-not-allowed disabled:border-zinc-200 disabled:bg-zinc-100 disabled:text-zinc-400"
+              >
+                全文選択
+              </button>
+              <button
+                type="button"
+                disabled={!generated}
+                onClick={copyAll}
+                className="min-h-8 rounded-lg bg-emerald-600 px-2.5 text-[11px] font-semibold text-white shadow-sm transition hover:bg-emerald-500 disabled:cursor-not-allowed disabled:bg-zinc-200 disabled:text-zinc-400"
+              >
+                {copied ? "コピー済" : "全文コピー"}
+              </button>
+            </div>
           </div>
+          <p className="text-[10px] leading-tight text-zinc-500">
+            編集して加筆・削除もできます。その内容がコピーと再表示に使われます。
+          </p>
           <textarea
             ref={textareaRef}
-            readOnly
             value={generated}
-            placeholder="ここに表示"
-            onFocus={selectAllText}
-            onClick={selectAllText}
-            className="min-h-0 flex-1 resize-none rounded-lg border border-zinc-200 bg-white px-2 py-1.5 text-xs leading-snug text-zinc-900 outline-none focus:border-zinc-400 focus:ring-1 focus:ring-zinc-300"
+            placeholder="「コメントを作成」後、ここに表示されます。そのまま手直ししてください。"
+            onChange={(e) => setGenerated(e.target.value)}
+            spellCheck={false}
+            autoCorrect="off"
+            autoCapitalize="sentences"
+            className="min-h-0 flex-1 resize-y rounded-lg border border-zinc-200 bg-white px-2 py-1.5 text-xs leading-snug text-zinc-900 outline-none focus:border-zinc-400 focus:ring-1 focus:ring-zinc-300"
           />
         </section>
       </div>
