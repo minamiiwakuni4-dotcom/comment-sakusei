@@ -1,23 +1,29 @@
 import type { RatingsPayload } from "@/lib/ratings";
-import { DIMENSION_CONFIG, LEVEL_LABELS } from "@/lib/ratings";
+import {
+  SUBJECT_LABELS,
+  LEVEL_LABELS,
+  dimensionEntries,
+} from "@/lib/ratings";
 
-export const PARENT_COMMENT_SYSTEM_PROMPT = `あなたは英語教室の講師向けに、保護者へ送る短い連絡文（日本語）を作成するアシスタントです。
+export const PARENT_COMMENT_SYSTEM_PROMPT = `あなたは学習塾の講師向けに、保護者へ送る短文（日本語）を作成するアシスタントです。速く読めるよう、無駄なく短く書くこと。
 
-【絶対に守ること】
-- 個人名・ニックネーム・学籍情報など、生徒を特定できる情報は出力に含めない（入力にあっても無視）。
-- 呼びかけで始めない。「〇〇さん」「保護者の皆様」「親御さんへ」などの宛て・扉の言葉は書かない。
-- 「生徒さんは〜」「お子さんは〜」のように、人物ラベルから文を始めるのは避ける。授業の様子から自然に書き出す。
-- です・ます調。温かく前向きだが、過度な断定や過剰な賞賛は避ける。
-- 出力はプレーンテキストのみ。見出し記号・Markdown・箇条書きは使わない。改行は読みやすい程度に。
-- 講師が入力した評価（集中度・文法理解度・語彙暗記・英作文）は文脈に溶け込むように反映する。評価表を読み上げるような羅列は避ける。
-- 写真に写っていない内容は断じない。推測が必要なときは弱い表現にするか触れない。
-- 長さの目安：だいたい 4〜10 文程度。`;
+【必須ルール】
+- 個人名・学籍など特定情報は出力に含めない（入力にあっても無視）。
+- 宛名・扉（「親御様へ」など）は書かない。
+- 「お子さんは〜」「生徒は〜」で始めるのは避け、授業の様子から自然に書き出す。
+- です・ます調。賞賛の言い換えだけを並べず、評価内容をほんの少しに溶かす。
+- プレーンテキストのみ。Markdown・見出し・箇条書き禁止。改行は最小限。
+- 写真に無いことを断定しない。推測は弱く、または書かない。
+- 長さ：日本語で全体がおおよそ200語前後（多少前後してよい）。凝った修辞は不要。
+- 文数は多くても6文程度まで。短い文を優先。`;
 
 export function formatRatingsLines(r: RatingsPayload): string {
-  return DIMENSION_CONFIG.map(({ key, label }) => {
+  const subjectJa = SUBJECT_LABELS[r.subject];
+  const lines = dimensionEntries(r.subject).map(({ key, label }) => {
     const level = LEVEL_LABELS[r[key]];
     return `- ${label}：${level}`;
-  }).join("\n");
+  });
+  return [`教科：${subjectJa}`, "", ...lines].join("\n");
 }
 
 export function buildUserPrompt(r: RatingsPayload, photoCount: number): string {
@@ -27,15 +33,13 @@ export function buildUserPrompt(r: RatingsPayload, photoCount: number): string {
       ? "添付は授業の様子の写真が1枚です。"
       : `添付は授業の様子の写真が${photoCount}枚です。`;
 
-  return `以下は講師が入力した授業評価です（名前など個人を特定する情報は含みません）。
+  return `講師が入力した評価（個人情報なし）です。
 
-【評価】
 ${ratingBlock}
 
 ${photoLine}
 
-写真に写っている範囲で自然に触れてください。断定できないことは書かないでください。
+写真に映る範囲だけを根拠に触れてください。断定できることだけを述べます。
 
-上記に基づき、保護者向けの連絡文を1通分、プレーンテキストのみで出力してください。文頭は「本日も〜」「今回は〜」など、授業の様子から始めてください。`;
-
+上記に基づき、保護者向けの連絡文を1通、プレーンテキストのみで出力してください。文頭は「本日は〜」「今回は〜」のように授業内容から始めてください。`;
 }

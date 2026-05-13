@@ -6,7 +6,7 @@ import {
 } from "@/lib/parent-comment-prompt";
 import { parseRatingsPayload } from "@/lib/ratings";
 
-export const maxDuration = 120;
+export const maxDuration = 60;
 
 const ALLOWED_TYPES = new Set([
   "image/jpeg",
@@ -57,7 +57,10 @@ export async function POST(request: Request) {
   const ratings = parseRatingsPayload(ratingsJson);
   if (!ratings) {
     return NextResponse.json(
-      { error: "評価の内容が不正です。4項目すべてを選んでください。" },
+      {
+        error:
+          "評価の内容が不正です。教科と4項目すべてを選んでください。",
+      },
       { status: 400 },
     );
   }
@@ -123,6 +126,10 @@ export async function POST(request: Request) {
           parts: [{ text: userText }, ...imageParts],
         },
       ],
+      generationConfig: {
+        maxOutputTokens: 900,
+        temperature: 0.45,
+      },
     });
 
     const text = result.response.text()?.trim();
