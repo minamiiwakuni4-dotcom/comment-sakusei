@@ -127,7 +127,7 @@ export async function POST(request: Request) {
         },
       ],
       generationConfig: {
-        maxOutputTokens: 900,
+        maxOutputTokens: 3072,
         temperature: 0.45,
       },
     });
