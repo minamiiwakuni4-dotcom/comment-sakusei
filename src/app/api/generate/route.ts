@@ -127,7 +127,8 @@ export async function POST(request: Request) {
         },
       ],
       generationConfig: {
-        maxOutputTokens: 1400,
+        /** 短文でもマルチモーダルで MAX_TOKENS 切れしやすいため余裕を持つ（プロンプトで字数を抑制） */
+        maxOutputTokens: 4096,
         temperature: 0.62,
       },
     });

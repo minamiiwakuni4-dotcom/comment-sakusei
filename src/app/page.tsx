@@ -129,17 +129,58 @@ export default function Home() {
     }
   }
 
-  const copyAll = useCallback(async () => {
-    if (!generated) return;
-    try {
-      await navigator.clipboard.writeText(generated);
+  const copyAll = useCallback(() => {
+    const ta = textareaRef.current;
+    const text = ta?.value ?? generated;
+    if (!text) return;
+
+    function showCopiedFeedback() {
       setCopied(true);
       window.setTimeout(() => setCopied(false), 2000);
-    } catch {
-      setError(
-        "自動コピーに失敗しました。下の欄をタップして全文選択し、コピーしてください。",
-      );
     }
+
+    /** iPad / Safari で Clipboard API が失敗しがちなため、ユーザー操作タップ後は同期コピーを先に試す */
+    try {
+      if (
+        ta &&
+        typeof document !== "undefined" &&
+        typeof document.execCommand === "function"
+      ) {
+        ta.focus();
+        ta.setSelectionRange(0, text.length);
+        if (document.execCommand("copy")) {
+          ta.setSelectionRange(text.length, text.length);
+          setError(null);
+          showCopiedFeedback();
+          return;
+        }
+      }
+    } catch {
+      /* Clipboard API に降りる */
+    }
+
+    try {
+      if (navigator.clipboard?.writeText) {
+        void navigator.clipboard.writeText(text).then(
+          () => {
+            setError(null);
+            showCopiedFeedback();
+          },
+          () => {
+            setError(
+              "コピーできませんでした。「全文選択」後、長押しメニューからコピーしてください。",
+            );
+          },
+        );
+        return;
+      }
+    } catch {
+      /* 下の共通エラー */
+    }
+
+    setError(
+      "コピーできませんでした。「全文選択」後、長押しメニューからコピーしてください。",
+    );
   }, [generated]);
 
   function selectAllText() {
